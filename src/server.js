@@ -2,10 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const configViewEngine = require("./config/viewEngine");
-
+const mongoose = require("mongoose");
 const connection = require("./config/database");
 
 const webRoutes = require("./routes/web");
+const Kitten = require("./models/Kitten");
 
 const app = express(); // app express
 const port = process.env.PORT || 8888; // declare prot
@@ -22,8 +23,17 @@ configViewEngine(app);
 app.use("/", webRoutes);
 
 //test connection
-connection();
 
-app.listen(port, hostname, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+const cat = new Kitten({ name: "phuongdz cat" });
+cat.save();
+
+(async () => {
+  try {
+    await connection();
+    app.listen(port, hostname, () => {
+      console.log(`Example app listening on port ${port}`);
+    });
+  } catch (error) {
+    console.log("Error connect to DB: ", error);
+  }
+})();
