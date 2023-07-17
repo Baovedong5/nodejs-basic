@@ -5,6 +5,7 @@ const configViewEngine = require("./config/viewEngine");
 const connection = require("./config/database");
 
 const webRoutes = require("./routes/web");
+const apiRoutes = require("./routes/api");
 
 const app = express(); // app express
 const port = process.env.PORT || 8888; // declare prot
@@ -19,6 +20,8 @@ configViewEngine(app);
 
 //khai bao route
 app.use("/", webRoutes);
+
+app.use("/v1/api/", apiRoutes);
 
 //test connection
 
