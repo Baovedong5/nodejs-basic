@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-//scheme: format shape data
 const customerSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
