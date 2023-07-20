@@ -7,6 +7,7 @@ const {
   deleteUpdateCustomerService,
   deleteBulkCustomerService,
 } = require("../services/customerService");
+const aqp = require("api-query-params");
 
 module.exports = {
   postCreateCustomer: async (req, res) => {
@@ -58,11 +59,11 @@ module.exports = {
   getAllCustomer: async (req, res) => {
     let limit = req.query.limit;
     let page = req.query.page;
-    let name = req.query.name;
+
     let customers = null;
 
     if (limit && page) {
-      customers = await getAllCustomerService(limit, page, name);
+      customers = await getAllCustomerService(limit, page, req.query);
     } else {
       customers = await getAllCustomerService();
     }

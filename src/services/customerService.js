@@ -1,4 +1,5 @@
 const Customer = require("../models/Cutomer");
+const aqp = require("api-query-params");
 
 const createCustomerService = async (customerData) => {
   try {
@@ -27,19 +28,14 @@ const createArrayCustomerService = async (arr) => {
   }
 };
 
-const getAllCustomerService = async (limit, page, name) => {
+const getAllCustomerService = async (limit, page, queryString) => {
   try {
     let result = null;
     if (limit && page) {
       let offset = (page - 1) * limit;
-      if (name) {
-        result = await Customer.find({
-          name: { $regex: ".*" + name + ".*" },
-        })
-          .skip(offset)
-          .limit(limit)
-          .exec();
-      } else result = await Customer.find({}).skip(offset).limit(limit).exec();
+      const { filter } = aqp(queryString);
+      delete filter.page;
+      result = await Customer.find(filter).skip(offset).limit(limit).exec();
     } else {
       result = await Customer.find({});
     }
