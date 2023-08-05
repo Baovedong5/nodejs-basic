@@ -31,6 +31,18 @@ const createProject = async (data) => {
     return newresult;
   }
 
+  if (data.type === "ADD-TASK") {
+    let myProject = await Project.findById(data.projectId).exec();
+
+    for (let i = 0; i < data.tasksArr.length; i++) {
+      myProject.tasks.push(data.tasksArr[i]);
+    }
+
+    let newresult = await myProject.save();
+
+    return newresult;
+  }
+
   return null;
 };
 
@@ -38,9 +50,8 @@ const getProject = async (queryString) => {
   const page = queryString.page;
 
   const { filter, limit, population } = aqp(queryString);
-  console.log("before: ", filter);
+
   delete filter.page;
-  console.log("after", filter);
 
   let offset = (page - 1) * limit;
   let result = await Project.find(filter)
